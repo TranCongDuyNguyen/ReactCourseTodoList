@@ -9,6 +9,11 @@ class App extends Component {
 
     this.state = {
       newItem: "",
+      currentState: {
+        all: true,
+        active: false,
+        completed: false
+      },
       todoItems: [ //data
         { title: "Work", isDone: true },
         { title: "Eat bimbim", isDone: true },
@@ -18,6 +23,9 @@ class App extends Component {
     
     this.onKeyUp = this.onKeyUp.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.onAllClick = this.onAllClick.bind(this);
+    this.onActiveClick = this.onActiveClick.bind(this);
+    this.onCompletedClick = this.onCompletedClick.bind(this);
   };
   
   doneClick(item){
@@ -63,8 +71,43 @@ class App extends Component {
     })
   }
 
+  onAllClick(){
+    let { currentState } = this.state;
+    this.setState({
+      currentState: {...currentState, all: true, active: false, completed: false}
+    })
+  }
+
+  onActiveClick(){
+    let { currentState } = this.state;
+    this.setState({
+      currentState: {...currentState, active: true, all: false, completed: false }
+    })
+  }
+
+  onCompletedClick(){
+    let { currentState } = this.state;
+    this.setState({
+      currentState: {...currentState, active: false, all: false, completed: true }
+    })
+  }
+
   render() {
-    const { todoItems, newItem } = this.state;
+    const { todoItems, newItem, currentState } = this.state;
+    let displayItems = [];
+    if(currentState.all){
+      displayItems = todoItems;
+    }
+    else if(currentState.active){
+      displayItems = todoItems.filter(function(item){
+        return !item.isDone;
+      })
+    }
+    else if(currentState.completed){
+      displayItems = todoItems.filter(function(item){
+        return item.isDone;
+      })
+    }
     return (
       <div className="App">
       <div className="Header">
@@ -77,9 +120,14 @@ class App extends Component {
         </input>
       </div>
           { (todoItems.length > 0) && 
-            todoItems.map((ele, idx, arr) => <TodoItem item = {ele} key ={idx} onClick = {this.doneClick(ele)}/>)
+            displayItems.map((ele, idx, arr) => <TodoItem item = {ele} key ={idx} onClick = {this.doneClick(ele)}/>)
           }
           { (todoItems.length === 0) && 'Nothing.'  }
+      <div className="Footer">
+          <div onClick = {this.onAllClick}>All</div>
+          <div onClick = {this.onActiveClick}>Active</div>
+          <div onClick = {this.onCompletedClick}>Completed</div>
+      </div>
       </div>
     );
     
