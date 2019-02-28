@@ -32,7 +32,8 @@
 }
 
 .App .Header input:focus {
-  outline: none;
+  outline-width: 1px;
+  outline-color: #bebebe;
 }
 
 .App .Footer {

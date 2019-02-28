@@ -21,6 +21,8 @@ class App extends Component {
       ]
     };
     
+    this.inputRef = React.createRef();
+
     this.onKeyUp = this.onKeyUp.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onAllClick = this.onAllClick.bind(this);
@@ -28,6 +30,10 @@ class App extends Component {
     this.onCompletedClick = this.onCompletedClick.bind(this);
   };
   
+  componentDidMount(){
+    this.inputRef.current.focus();
+  }
+
   doneClick(item){
     return(event) =>{ // don't need to bind this method because of arrow function
       let { todoItems } = this.state;
@@ -49,7 +55,6 @@ class App extends Component {
     let { todoItems } = this.state;
     let text = event.target.value;
     if (event.keyCode === 13){
-      if (!text) { return; };
       text = text.trim();
       if (!text) { return; };
       this.setState({
@@ -116,7 +121,8 @@ class App extends Component {
               placeholder = "Type something" 
               onKeyUp = {this.onKeyUp} 
               onChange = {this.onChange}
-              value = {newItem}>
+              value = {newItem}
+              ref = {this.inputRef}>
         </input>
       </div>
           { (todoItems.length > 0) && 

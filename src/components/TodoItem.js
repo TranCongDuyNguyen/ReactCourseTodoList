@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import './TodoItem.css';
-import classnames from 'classnames';
 import checkImg from '../images/check.svg';
 import checkDoneImg from '../images/check-done.svg';
+
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
 
 class TodoItem extends Component{
     
@@ -34,4 +36,11 @@ class TodoItem extends Component{
     }
 }
 
+TodoItem.propTypes = { // validate passing props
+    item: PropTypes.shape({ // shape object
+        title: PropTypes.string.isRequired, // must have this property in props
+        isDone: PropTypes.bool
+    }),
+    onClick: PropTypes.func
+};
 export default TodoItem;
