@@ -6,35 +6,42 @@ import TodoItem from './components/TodoItem';
 class App extends Component {
   constructor(){
     super();
-    this.todoItem = [ //data
-      { title: "Work", isDone: true },
-      { title: "Eat bimbim", isDone: true },
-      { title: "Sleep", isDone: true }
-    ];
+
     this.state = {
-      todoItemState: this.todoItem
+      todoItems: [ //data
+        { title: "Work", isDone: true },
+        { title: "Eat bimbim", isDone: true },
+        { title: "Sleep", isDone: true }
+      ]
     };
-    this.doneClick = this.doneClick.bind(this);
+    
   };
 
-  doneClick(currentItem){
-    for(let item of this.todoItem){
-      if(item === currentItem){
-        item.isDone = !item.isDone;
-      }
-    };
-    this.setState({
-      todoItemState: this.todoItem
-    })
+  doneClick(item){
+    return(event) =>{
+      let { todoItems } = this.state;
+      let index = todoItems.indexOf(item);
+      this.setState({
+        todoItems: [
+          ...todoItems.slice(0, index),
+          {
+            ...item,
+            isDone: !item.isDone
+          },
+          ...todoItems.slice(index + 1)
+        ]
+      })
+    }
   }
 
   render() {
+    const { todoItems } = this.state;
     return (
       <div className="App">
-          { (this.todoItem.length > 0) && 
-            this.todoItem.map((ele, idx, arr) => <TodoItem item = {ele} key ={idx} onClick = {this.doneClick.bind(this, ele)}/>)
+          { (todoItems.length > 0) && 
+            todoItems.map((ele, idx, arr) => <TodoItem item = {ele} key ={idx} onClick = {this.doneClick(ele)}/>)
           }
-          { (this.todoItem.length === 0) && 'Nothing.'  }
+          { (todoItems.length === 0) && 'Nothing.'  }
       </div>
     );
     
